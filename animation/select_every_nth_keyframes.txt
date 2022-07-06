@@ -1,0 +1,19 @@
+# select-every-nth-keyframes
+# https://blender.stackexchange.com/questions/119181/dope-sheet-keyframes-select-every-nth-frame
+
+import bpy
+context = bpy.context
+ob = context.object
+ad = ob.animation_data
+action = ad.action if ad else None
+if action:
+    for fc in action.fcurves:
+        #fc.select = True # select fcurve too?
+        sel = list(bool(i % 5) for i in range(len(fc.keyframe_points)))
+        # select point and handles
+        fc.keyframe_points.foreach_set("select_control_point", sel)
+        fc.keyframe_points.foreach_set("select_left_handle", sel)
+        fc.keyframe_points.foreach_set("select_right_handle", sel)
+        #del(sel)  # clean up?
+
+        
